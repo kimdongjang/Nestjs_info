@@ -2,7 +2,7 @@
 nestjs 정리
 
 ## Controller  
-### @Req, @Res는 차후 퍼포먼스 문제로 위해 전환할 경우를 대비하기 위해 사용하지 않는 것이 좋다.
+### @Req, @Res는 차후 퍼포먼스 문제로 전환할 경우를 대비하기 위해 사용하지 않는 것이 좋다.
 @Request()	<-  req  
 @Response(), @Res()*	<-  res  
 @Next()	 <-  next  
