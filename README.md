@@ -13,3 +13,38 @@ nestjs 정리
 @Headers(name?: string)	 <-  req.headers / req.headers[name]  
 @Ip()	<-  req.ip  
 @HttpCode(status:number)	   
+  
+#### @Query를 사용한 예(year=2022인 데이터를 가져오기)
+```js
+@Controller('movies')
+export class MoviesController {
+  @Get('/search')
+  search(@Query('year') searchingYear: number) {
+    return `We are Searching made after: ${searchingYear}`;
+  }
+
+}
+```
+
+  
+#### req 대신 @Body를 사용한 예
+```js
+import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+
+@Controller('movies')
+export class MoviesController {
+  @Post()
+  create(@Body() movieData) {
+    console.log(movieData); // json
+    return movieData;
+  }
+
+  @Patch('/:id')
+  patch(@Param('id') movieId: string, @Body() updateData) {
+    return {
+      updatedMovie: movieId,
+      ...updateData,
+    };
+  }
+}
+```
