@@ -107,5 +107,15 @@ consumer
   )
   .forRoutes(CatsController);
 ```  
-위와 같이 ```exclude```를 사용하여 미들웨어가 적용되는 경로를 제외할 수도 있다.
+위와 같이 ```exclude```를 사용하여 미들웨어가 적용되는 경로를 제외할 수도 있다.  
 
+#### 미들웨어 기능 함수 사용
+```js
+import { Request, Response, NextFunction } from 'express';
+
+export function logger(req: Request, res: Response, next: NextFunction) {
+  console.log(`Request...`);
+  next();
+};
+```
+위와 같이 logger 미들웨어에 next라는 함수를 적용해서 실행시킬 수도 있다.
