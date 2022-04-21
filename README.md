@@ -48,3 +48,49 @@ export class MoviesController {
   }
 }
 ```
+
+## Middleware
+![image](https://user-images.githubusercontent.com/41901043/164385899-7bfbcb4d-3a44-4126-bc8a-53ad295673ea.png)
+미들웨어는 라우트 핸들러 전에 호출되는 함수로, 애플리케이션의 요청-응답 주기에 있는 미들웨어 기능이다.  
+
+#### 미들웨어의 기능
++ 모든 코드를 실행
++ 요청 및 응답 개체를 변경
++ 요청-응답 주기를 종료
++ 스택의 다음 미들웨어 함수를 호출
+
+```js
+import { Injectable, NestMiddleware } from '@nestjs/common';
+import { Request, Response, NextFunction } from 'express';
+
+@Injectable()
+export class LoggerMiddleware implements NestMiddleware {
+  use(req: Request, res: Response, next: NextFunction) {
+    console.log('Request...');
+    next();
+  }
+}
+```
+
+미들웨어는 ```@Injecttable()```가 있는 클래스에서 구현한다. ```NestMiddleware``` 인터페이스를 상속받아 구현해야 한다.  
+```constructor```를 이용해 동일한 모듈 내에서 사용가능한 종속성(Service)을 주입할 수 있다.  
+
+#### 미들웨어 적용
+```js
+import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
+import { LoggerMiddleware } from './common/middleware/logger.middleware';
+import { CatsModule } from './cats/cats.module';
+
+@Module({
+  imports: [CatsModule],
+})
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(LoggerMiddleware)
+      .forRoutes('cats');
+  }
+}
+```  
+
+```NestMoudle```을 ```app.module.ts```에 상속받아서 ```configure()```를 구현하는 것으로 모듈에 미들웨어를 적용할 수 있다.
