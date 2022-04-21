@@ -93,4 +93,19 @@ export class AppModule implements NestModule {
 }
 ```  
 
-```NestMoudle```을 ```app.module.ts```에 상속받아서 ```configure()```를 구현하는 것으로 모듈에 미들웨어를 적용할 수 있다.
+```NestMoudle```을 ```app.module.ts```에 상속받아서 ```configure()```를 구현하는 것으로 모듈에 미들웨어를 적용할 수 있다.  
+```forRoutes('cats')```은 ```/cats```의 경로로 들어오는 request에 대한 핸들러를 적용한다는 의미.  
+```.forRoutes({ path: 'cats', method: RequestMethod.GET });``` 혹은 특정 요청 메서드 유형(Get, Post, ...)을 지정할 수도 있다.
+
+```js
+consumer
+  .apply(LoggerMiddleware)
+  .exclude(
+    { path: 'cats', method: RequestMethod.GET },
+    { path: 'cats', method: RequestMethod.POST },
+    'cats/(.*)',
+  )
+  .forRoutes(CatsController);
+```  
+위와 같이 ```exclude```를 사용하여 미들웨어가 적용되는 경로를 제외할 수도 있다.
+
