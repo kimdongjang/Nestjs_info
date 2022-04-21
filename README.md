@@ -144,7 +144,7 @@ export class AuthGuard implements CanActivate {
 이 반환 값을 통해 아래와 같은 작업을 제어한다.
 + true : 요청을 처리
 + false : 요청을 거부  
-심플하다  
++ 
 
 #### 실행 컨텍스트
 ```canActivate```는 ```ExcecutionContext```라고 하는 인스턴스를 가지는데, 이 인스턴스는 ```ArgumentsHost```를 상속 받는 객체다.   
