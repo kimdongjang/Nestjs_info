@@ -144,12 +144,12 @@ export class AuthGuard implements CanActivate {
 이 반환 값을 통해 아래와 같은 작업을 제어한다.
 + true : 요청을 처리
 + false : 요청을 거부  
-+ 
 
-#### 실행 컨텍스트
+
+## 실행 컨텍스트
+실행 컨텍스트는 권한 부여, 필터, 인터셉터를 빌드하는데 사용할 수 있는 정보가 담긴 ```ArgumentsHost```과 ```ExecutionContext```를 제공한다.  
 ```canActivate```는 ```ExcecutionContext```라고 하는 인스턴스를 가지는데, 이 인스턴스는 ```ArgumentsHost```를 상속 받는 객체다.   
-```ArgumentsHost```는 요청 핸들러에 전달되는 인수에 접근하여 정보를 확인하기 위한 메서드를 제공하는 클래스로,  
-인수를 검색하기 위해 http, rpc, websocket과 같은 컨텍스트를 선택하여 애플리케이션 유형을 판별한다.
+```ArgumentsHost```는 요청 핸들러에 전달되는 인수에 접근하여 정보를 확인하기 위한 메서드를 제공하는 클래스로, 인수를 검색하기 위해 http, rpc, websocket과 같은 컨텍스트를 선택하여 애플리케이션 유형을 판별한다.
 ```js
 if (host.getType() === 'http') {
   // do something that is only important in the context of regular HTTP requests (REST)
@@ -165,6 +165,17 @@ const request = context.switchToHttp().getRequest();
 return validateRequest(request);
 ```
 위와 같이 context를 판별하여 해당 request가 적합한 request인지 확인하는 절차를 진행한다.
+
+
+### 호스트 핸들러
+핸들러에 전달되는 배열을 검색하기 위해 ```getArgs()``` 메서드를 사용한다.
+```js
+const [req, res, next] = host.getArgs();
+// or
+const request = host.getArgByIndex(0);
+const response = host.getArgByIndex(1);
+```
+
 
 
 
