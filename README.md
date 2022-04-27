@@ -66,6 +66,22 @@ export class UsersController {
 ```
 따라서 위와 같이 **의존성 주입**(Depenndency Injection, DI)을 통해 객체를 생성하고 사용할 때 관심사를 분리해 가독성과 재사용성이 높은 코드를 작성할 수 있게 한다.
 
+### 사용방법
+```js
+import { Injectable } from '@nestjs/common';
+
+@Injectable()
+export class UsersService {
+    ...
+
+  remove(id: number) {
+    return `This action removes a #${id} user`;
+  }
+}
+```
+Service를 구성했다면 ```@Injectable``` 데코레이터를 사용해 다른 nest의 컴포넌트에서도 위 서비스를 주입해 사용할 수 있도록 지정할 수 있다.
+
+
 
 
 ## Middleware
