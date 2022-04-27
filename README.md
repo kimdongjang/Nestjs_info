@@ -48,6 +48,25 @@ export class MoviesController {
   }
 }
 ```
+## Provider
+컨트롤러가 요청과 응답을 가공하고 처리하는 역할을 맡는다면, 사용자가 요청한 **핵심 기능**을 처리하는 역할은 프로바이더의 역할이다.  
+사용자가 전달해준 데이터를 가지고 주변에 위치한 가게를 검색한다던가, 회원가입을 한다던가, 앱이 제공하고자 하는 핵심 기능을 처리하는, 즉 비즈니스 로직을 프로바이더가 수행하는데  
+대표적으로 서비스(Service), 레포지토리(Repository), 팩토리(Factory), 헬퍼(Helper) 등의 여러가지 형태로 프로바이더를 구성할 수 있다.  
+```js
+@Controller('users')
+export class UsersController {
+  constructor(private readonly usersService: UsersService) {}
+    ...
+
+    @Delete(':id')
+    remove(@Param('id') id: string) {
+      return this.usersService.remove(+id);
+    }
+}
+```
+따라서 위와 같이 **의존성 주입**(Depenndency Injection, DI)을 통해 객체를 생성하고 사용할 때 관심사를 분리해 가독성과 재사용성이 높은 코드를 작성할 수 있게 한다.
+
+
 
 ## Middleware
 ![image](https://user-images.githubusercontent.com/41901043/164385899-7bfbcb4d-3a44-4126-bc8a-53ad295673ea.png)
