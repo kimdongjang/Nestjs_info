@@ -93,6 +93,55 @@ export class UsersModule {}
 또한 프로바이더를 등록했다는 것을 모듈에서도 명시를 해주어야 한다.
 
 
+## 모듈
+여러 컴포넌트를 조합해 좀 더 큰 작업을 수행하는 단위를 말한다. 유저의 정보를 관리하는 유저 모듈, 채팅기능을 담당하는 채팅 모듈 등 모듈들이 모여 채팅 서비스를 구현할 수 있게 된다.
+Nest에서는 App Module이라고 하는 루트 모듈을 다른 모듈들로 구성되도록 해야 한다.  
+모듈을 나누는 이유는 각 모듈마다 책임을 나누어 주어 모듈간의 응집도를 높이기 위함이다.  
+
+### Import, Export
+모듈은 가져오기와 내보내기 기능을 사용할 수 있다.
+예를 들어 앱을 기동하기 위해선 AppModule에 Core Module과 로그를 기록하기 위한 Logger Module, 2개의 모듈을 Import 해야한다고 가정한다.
+이때 Core Module에서 Logger Module을 Import, Export하고 AppModule에서는 Core Module만 Import하는 것으로 Logger Service를 사용할 수 있게 된다.
+#### CommonModule
+```js
+@Module({
+  imports: [LoggerModule],
+  exports: [LoggerModule],
+})
+export class CoreModule { }
+```
+#### LoggerModule
+```js
+@Module({
+  providers: [LoggerService],
+  exports: [LoggerService],
+})
+export class LoggerModule { }
+```
+#### AppModule
+```js
+@Module({
+  imports: [CoreModule],
+  controllers: [AppController],
+  providers: [AppService],
+})
+export class AppModule {}
+```
+#### AppController
+```js
+@Controller()
+export class AppController {
+  constructor(private readonly loggerService: LoggerService) { }
+
+  @Get('/hello')
+  getLoggerHello(): string {
+    return this.loggerService.hello();
+  }
+}
+```
+
+
+
 
 
 ## Middleware
