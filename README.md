@@ -82,6 +82,17 @@ export class UsersService {
 Service를 구성했다면 ```@Injectable``` 데코레이터를 사용해 다른 nest의 컴포넌트에서도 위 서비스를 주입해 사용할 수 있도록 지정할 수 있다.
 
 
+### 모듈에 프로바이더 등록
+```js
+@Module({
+    ...
+  providers: [UsersService]
+})
+export class UsersModule {}
+```
+또한 프로바이더를 등록했다는 것을 모듈에서도 명시를 해주어야 한다.
+
+
 
 
 ## Middleware
