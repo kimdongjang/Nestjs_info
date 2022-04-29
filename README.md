@@ -25,6 +25,7 @@ export class MoviesController {
 
 }
 ```
+Query를 사용하면 ```/movies/search?year=2022```와 같은 형태로 접근해 year의 값을 전달할 수 있다.
 
   
 ### req 대신 @Body를 사용한 예
