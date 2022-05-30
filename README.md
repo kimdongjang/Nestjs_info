@@ -227,7 +227,7 @@ Guard는 런타임에 존재하는 특정 조건(권한, 역할, ACL 등)에 따
 Guard는 컨트롤러 Route Handler가 실행되기 전에 호출됨  
 
 ### 권한 부여
-Guard가 사용되는 예로는 인증이 된 특정 사용자에게 충분한 권한이 있는 경우에만 특정한 경로를 사용할 수 있도록 하는 기능이다.
+Guard가 사용되는 예로는 인증이 된 특정 사용자에게 충분한 권한이 있는 경우에만 특정한 경로를 사용할 수 있도록 하는 기능이다. 예를 들어 사용자가 요청을 했을 경우, 그 사용자가 인증된 사용자인지 확인하기 위해 요청에 포함된 토큰을 추출, 검증해서 해당 요청을 진행할 수 있는지의 여부를 결정한다.
 ```js
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { Observable } from 'rxjs';
@@ -246,6 +246,15 @@ export class AuthGuard implements CanActivate {
 이 반환 값을 통해 아래와 같은 작업을 제어한다.
 + true : 요청을 처리
 + false : 요청을 거부  
+
+이러한 Guard는 컨트롤러 범위, 메서드 범위, 전역 범위에서 데코레이터를 지정해 사용할 수 있으며, 단일 인수 또는 ''과 같은 쉼표로 구분된 형태로 데코레이터에 문자열을 포함해 guard 목록을 구분할 수 있다.
+```js
+@Controller('cats')
+@UseGuards(RolesGuard)
+export class CatsController {}
+```
+
+
 
 
 ## 실행 컨텍스트
