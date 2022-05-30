@@ -254,6 +254,78 @@ export class AuthGuard implements CanActivate {
 export class CatsController {}
 ```
 
+## Passport Strategy
+인증 전략
+```js
+import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { PassportStrategy } from '@nestjs/passport';
+import { Strategy } from 'passport-local';
+import { AuthService } from '../auth.service';
+
+@Injectable()
+export class LocalStrategy extends PassportStrategy(Strategy) {
+  constructor(private authService: AuthService) {
+    super();
+  }
+
+  async validate(username: string, password: string): Promise<any> {
+    const user = await this.authService.vaildateUser(username, password);
+    if (!user) {
+      throw new UnauthorizedException();
+    }
+    return user;
+  }
+}
+```
+인가 기능을 사용하기 위해서 passport라는 기능을 nest.js에서 제공한다.  
+Guard에서 언급했던 것과 같이 호출 되는 순서는 ```Guard -> Strategy -> Contoller``` 순으로 호출된다.  
+
+```validate```메소드는 passport strategy에서 인터페이스로 구현하며, validate에서는 사용자가 존재하고 유효한지 확인하고, 유효하지 않을 경우 예외를 던진다.  
+
+passport 로컬 전략의 기본 이름은 'local'이다.  
+```@UseGuards()```에서 해당 이름을 참조해 passport-local 패키지에서 제공하는 코드와 연결한다.  
+여러 가지의 전략을 설정할 수 있기 때문에 따로 클래스를 만들어서 관리한다.
+```js
+import { Injectable } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+
+@Injectable()
+export class LocalAuthGuard extends AuthGuard('local') {}
+```
+
+### Module 설정
+```js
+import { Module } from '@nestjs/common';
+import { PassportModule } from '@nestjs/passport';
+import { UsersModule } from 'src/users/users.module';
+import { AuthService } from './auth.service';
+import { LocalStrategy } from './local.strategy';
+
+@Module({
+  imports: [UsersModule, PassportModule],
+  providers: [AuthService, LocalStrategy],
+})
+export class AuthModule {}
+```
+### Controller 설정
+```js
+import { Controller, Get, Post, Request, UseGuards } from '@nestjs/common';
+import { AppService } from './app.service';
+import { LocalAuthGuard } from './auth/local-auth.guard';
+
+@Controller()
+export class AppController {
+  constructor(private readonly appService: AppService) {}
+
+  @UseGuards(AuthGuard('local'))
+  @Post('auth/login')
+  async login(@Request() req) {
+    return req.user;
+  }
+}
+```
+
+
 
 
 
