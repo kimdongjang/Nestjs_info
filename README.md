@@ -220,6 +220,12 @@ export function logger(req: Request, res: Response, next: NextFunction) {
 ## Guard
 Guard는 런타임에 존재하는 특정 조건(권한, 역할, ACL 등)에 따라 주어진 요청이 핸들러에 의해 처리될 수 있는지에 대한 여부를 결정한다. 이를 종종 **권한 부여 또는 인증**라고 한다.  
 
+### 프로세스
+![image](https://user-images.githubusercontent.com/41901043/170917478-0d5b944b-174e-4c53-a7ea-75314556111b.png)
+
+@LocalAuthGuard() -> LocalStrategy.validate() -> Contoller 로직 수행  
+Guard는 컨트롤러 Route Handler가 실행되기 전에 호출됨  
+
 ### 권한 부여
 Guard가 사용되는 예로는 인증이 된 특정 사용자에게 충분한 권한이 있는 경우에만 특정한 경로를 사용할 수 있도록 하는 기능이다.
 ```js
